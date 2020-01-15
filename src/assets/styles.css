@@ -1,3 +1,118 @@
+:root {
+  --dark-red: darkred;
+}
+
+
 body {
-  margin: 10%;
+  background-color: white;
+  font-family: 'Lato', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem;
+}
+
+ul {
+  display: flex;
+  list-style-type: none;
+}
+
+li {
+  font-size: 1.3rem;
+  color: var(--dark-red);
+  font-weight: bold;
+  cursor: pointer;
+  padding: 10px;
+}
+
+li:hover {
+  background-color: var(--dark-red);
+  color: white;
+}
+
+li:active {
+  background-color: lightgrey;
+}
+
+input {
+  background-color: white;
+  border: 1px solid darkred;
+  padding: .8em 4em;
+  border-radius: 8px;
+  outline: none;
+}
+
+header {
+  height: 30vh;
+  display: flex;
+}
+
+.header-text{
+  background-color: limegreen;
+  flex: 4;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+figure {
+  flex: 6;
+  background-image: url("http://place-puppy.com/700x200");
+}
+
+.info-area {
+  margin: 2rem;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.info-text {
+  width: 70vw;
+  text-align: center;
+}
+
+main {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.ruokala {
+  width: 40vw;
+  height: 30vh;
+  display: flex;
+  border: 1px solid dimgrey;
+  border-radius: 16px;
+  color: black;
+  padding: 1rem 0;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.ruokala > figure {
+  border: 1px solid dimgrey;
+  background-image: url("http://place-puppy.com/200x200");
+  width: 10rem;
+  height: 10rem;
+}
+
+
+.kolmio {
+  width: 0;
+  height: 0;
+  border-bottom: 30vh solid limegreen;
+  border-right: 10vh solid transparent;
 }
