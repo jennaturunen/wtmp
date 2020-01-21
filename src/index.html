@@ -6,6 +6,73 @@
     <link rel="stylesheet" href="assets/styles.css">
   </head>
   <body>
-    <p>Yeah!</p>
+    <!-- NAVIGATION -->
+    <nav>
+      <ul>
+        <li>Etusivu</li>
+        <li>Ruokalistat</li>
+        <li>Ravintolat</li>
+        <li>Yhteystiedot</li>
+      </ul>
+      <label>
+        <input placeholder="Hae ravintolan nimellä" />
+      </label>
+    </nav>
+
+    <!-- HEADER -->
+    <header>
+      <div class="header-text">
+        <h1>Lounari.</h1>
+        <h4>Missä tänään syötäisiin?</h4>
+      </div>
+      <div class="header-img">
+        <div class="triangle"></div>
+      </div>
+    </header>
+
+    <section class="info-area">
+      <h3 class="info-text">
+        Missä tänään syötäisiin? Tuttu tarina ennen lounashetkeä. Palvelu etsii
+        lähelläsi olevat lounaspaikat, sekä näyttää niiden päivittäisen
+        lounaslistan. Viikottaiset lounaslistat ovat myös käytettävissäsi.
+        Pääset niihin klikkaamalla ravintolan logoa.
+      </h3>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <main>
+      <article class="restaurant">
+        <nav class="menuOptions">
+          <button class="language">ENG</button>
+          <button class="random">Random</button>
+          <div class="drop">
+            <button class="sort">Lajittele</button>
+            <div class="dropdownContent dropdown">
+              <a class="desc">A-Z</a>
+              <a class="asc">Z-A</a>
+            </div>
+          </div>
+        </nav>
+        <h3>Metropolia Myyrmäki</h3>
+        <div class="menuList"></div>
+      </article>
+
+      <article class="restaurant">
+        <nav class="menuOptions">
+          <button class="language">ENG</button>
+          <button class="random">Random</button>
+          <div class="drop">
+            <button class="sort">Lajittele</button>
+            <div class="dropdownContent dropdown">
+              <a class="desc">A-Z</a>
+              <a class="asc">Z-A</a>
+            </div>
+          </div>
+        </nav>
+        <h3>Metropolia Karamalmi</h3>
+        <div class="menuList"></div>
+      </article>
+
+    </main>
   </body>
 </html>

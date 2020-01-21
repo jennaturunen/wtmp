@@ -1,3 +1,159 @@
+:root {
+  --dark-red: darkred;
+}
+
+
 body {
-  margin: 10%;
+  background-color: white;
+  font-family: 'Lato', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem;
+}
+
+ul {
+  display: flex;
+  list-style-type: none;
+}
+
+li {
+  font-size: 1.3rem;
+  color: var(--dark-red);
+  font-weight: bold;
+  cursor: pointer;
+  padding: 10px;
+}
+
+li:hover {
+  background-color: var(--dark-red);
+  color: white;
+}
+
+li:active {
+  background-color: lightgrey;
+}
+
+input {
+  background-color: white;
+  border: 1px solid darkred;
+  padding: .8em 4em;
+  border-radius: 8px;
+  outline: none;
+}
+
+header {
+  height: 30vh;
+  display: flex;
+}
+
+.header-text{
+  background-color: limegreen;
+  flex: 4;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-img {
+  flex: 6;
+  background-image: url("images/lounas.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.info-area {
+  margin: 2rem;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.info-text {
+  width: 70vw;
+  text-align: center;
+}
+
+main {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.restaurant {
+  width: 40vw;
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid dimgrey;
+  border-radius: 16px;
+  color: black;
+  padding: 1rem;
+  align-items: center;
+}
+
+.menuList {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-bottom: 30vh solid limegreen;
+  border-right: 10vh solid transparent;
+}
+
+button {
+  font-size: 1rem;
+  width: 10vw;
+}
+
+.menuOptions {
+  margin: 0;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.dropdownContent {
+  display: none;
+  flex-direction: column;
+  background-color: lightgray;
+  z-index: 1;
+  position: absolute;
+  top: 100%;
+  width: 10vw;
+}
+
+.show {
+  display: flex;
+}
+
+.dropdownContent a {
+  color: black;
+  text-decoration: none;
+  text-align: center;
+  font-size: 1.4rem;
+}
+
+.dropdownContent a:hover {
+  background-color: #ddd;
+}
+
+.drop {
+  position: relative;
 }
