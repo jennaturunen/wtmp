@@ -2,40 +2,47 @@
 - Pelaaja on onnekas ja tietää numeron olevan 1-100 väliltä
 - Ensin arvataan puolivälistä numero > tässä tapauksessa 50
   ->  peli ilmoittaa onko arvaus liian pieni/suuri
-    -> jos liian suuri > arvataan puoliväli 1-50 väliltä > arvataan seuraavaksi 25 > sitten 0-25 > 13 jne
-    -> jos liian pieni > arvataan puoliväli 50-100 väliltä > arvataan seuraavaksi 75 > sitten 75-100 > 88 jne
-- peliä jatketaan samaan tapaan arvaamalla aina puolet edellisestä arvatusta numerosta kunnes oikea numero arvataan
+    -> jos liian suuri > arvataan puoliväli 1-50 väliltä > arvataan seuraavaksi 25 (sitten 0-25 > 13 jne)
+    -> jos liian pieni > arvataan puoliväli 50-100 väliltä > arvataan seuraavaksi 75 (sitten 75-100 > 88 jne)
+- peliä jatketaan samaan tapaan arvaamalla aina puoliväli minimi- ja maksimiarvojen väliltä kunnes oikea numero arvataan
 */
 
-import {startGame, checkGuess, resetGame} from './modules/guess-game';
+import {startGame, checkGuess, resetGame, displayResults} from './modules/guess-game';
 
 startGame();
 
 const testGamePlay = () => {
+  let guessHistory = [];
   let guessCounter = 0;
   let newGuess = 50;
   let maxValue = 100;
-  let minValue = 1;
+  let minValue = 0;
   let gameOver = false;
 
   while(!gameOver) {
+    // Push new guess to history-array and guess again
+    guessHistory.push(newGuess);
     let correctGuess = checkGuess(newGuess);
     guessCounter++;
 
-    // Jos arvaus on oikea
+    // When the guess is correct display all guesses and start new game
     if (correctGuess === 0) {
       gameOver = true;
-      console.log('oikea arvaus');
+      console.log('correct!');
+      console.log('Guessed values in the game', guessHistory);
       resetGame();
 
-      // Jos arvaus on liian pieni
+      // When the guess is too low change minValue and next guess higher
     } else if (correctGuess < 0){
-      console.log(newGuess = Math.round((maxValue + newGuess)/2));
-      console.log('uusi arvaus liian pieni', newGuess);
-      // Jos arvaus on liian suuri
+      minValue = newGuess;
+      newGuess = Math.round((maxValue + newGuess)/2);
+      console.log('too low, new guess is', newGuess);
+
+      // When the guess is too high change maxValue and next guess lower
     } else {
-      console.log(newGuess = Math.round((minValue + newGuess)/2));
-      console.log('uusi arvaus liian suuri', newGuess);
+      maxValue = newGuess;
+      newGuess = Math.round((minValue + newGuess)/2);
+      console.log('too high, new guess is', newGuess);
     }
   }
 
@@ -45,11 +52,21 @@ const testGamePlay = () => {
 
 let guessCounts = [];
 
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 1000; i++) {
   guessCounts.push(testGamePlay());
 }
 
 console.log('guess counts', guessCounts);
 
 const maxGuessCount = Math.max(...guessCounts);
-console.log('maximi arvaus', maxGuessCount);
+console.log('max count', maxGuessCount);
+
+const minGuessCount = Math.min(...guessCounts);
+console.log('min count', minGuessCount);
+
+const avg = array => array.reduce((a,b) => a + b)/array.length;
+const averageGuessCount = avg(guessCounts);
+console.log('average', averageGuessCount);
+
+// Show results in HTML
+displayResults(maxGuessCount, minGuessCount, averageGuessCount);

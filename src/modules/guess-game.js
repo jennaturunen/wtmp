@@ -15,6 +15,8 @@ const guessFacts = document.querySelector('.guessFacts');
 const guessSubmit = document.querySelector('.guessSubmit');
 const guessField = document.querySelector('.guessField');
 
+const showResults = document.querySelector('#displayResults');
+
 let guessCount = 1;
 let resetButton;
 
@@ -114,11 +116,13 @@ const resetGame = () => {
   lastResult.style.backgroundColor = 'white';
 
   randomNumber = Math.floor(Math.random() * max) + min;
-  console.log('randomi', randomNumber);
+  console.log('random', randomNumber);
 
 };
 
+const displayResults = (maxGuessCount, minGuessCount, averageCount) => {
+  showResults.textContent = `Maximum number of total guess counts was ${maxGuessCount},
+  minimum number was ${minGuessCount} and the average was ${averageCount}`;
+};
 
-
-
-export {startGame, checkGuess, resetGame};
+export {startGame, checkGuess, resetGame, displayResults};
