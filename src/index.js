@@ -71,7 +71,7 @@ let veganDishes = [];
 // Loop diets of the dishes and push vegan dishes to array
 const loopTheDiets = dishes => {
   for (const diet of dishes) {
-    //console.log('loop diets', diet.Diets);
+    console.log('loop diets', diet.Diets);
     if (diet.Diets.includes('Veg')) {
       veganDishes.push(diet.Name);
     }
@@ -81,7 +81,7 @@ const loopTheDiets = dishes => {
 // Loop dishes of the day
 const loopTheDishes = menu => {
   for (const dish of menu) {
-    //console.log('loop dishes', dish.Meals);
+    console.log('loop dishes', dish.Meals);
     loopTheDiets(dish.Meals);
   }
 };
