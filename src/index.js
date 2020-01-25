@@ -1,4 +1,4 @@
-import LunchMenu from './assets/sodexo.json';
+
 
 // Create all menus
 const menus = document.querySelectorAll('.menuList');
