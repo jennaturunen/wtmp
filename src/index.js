@@ -10,10 +10,10 @@ const menuArray = [
   { name: 'Pureed root vegetable soup with smoked cheese', price: 8.0 }
 ];
 
-// First letter must be uppercase letter
+// First letter must be uppercase letter, whole length 4-64
 // Can contain letters, numbers, commas, hyphens, white spaces, slashes and parentheses
 const validateMeal = meal => {
-  const pattern = /^[A-ZÖÄÅ]{1}[a-zöäå0-9,-\s\/()]{3,64}$/;
+  const pattern = /^[A-ZÖÄÅ]{1}[a-zöäå0-9,-\s\/()]{3,63}$/;
   return pattern.test(meal);
 };
 
@@ -23,11 +23,12 @@ for (const meal of menuArray) {
 }
 
 // Sort menu in descending order
-const sortedMenuDescending = menuArray.sort((a, b) => {
-  return b.price - a.price;
-});
+const sortedMenuDescending = array =>
+  array.sort((a, b) => {
+    return b.price - a.price;
+  });
 
-console.log(sortedMenuDescending);
+console.log(sortedMenuDescending(menuArray));
 
 // Sort menu in ascending order
 const sortedMenuAscending = array => {
@@ -40,7 +41,7 @@ console.log(sortedMenuAscending(menuArray));
 const cheapDishes = array => array.filter(array => array.price < 5);
 console.log('show cheap dishes', cheapDishes(menuArray));
 
-// Hard coded way to filter
+// Hard coded way to filter (for practice)
 const cheapMeals = menuArray.filter(menuArray => menuArray.price < 5);
 console.log('hard coded cheap meals', cheapMeals);
 
@@ -49,14 +50,13 @@ const addToPrices = array =>
   array.map(array => (array.price * 1.15).toFixed(2));
 console.log('Add to prices', addToPrices(menuArray));
 
-// Raise all prices, hard coded array
+// Raise all prices, hard coded array (for practice)
 const raisePrices = menuArray.map(menuArray => menuArray.price * 1.15);
 console.log('hard coded raise', raisePrices);
 
 // Sum all the prices using reduce
 const sumPrices = array => array.reduce((sum, dish) => sum + dish.price, 0);
 console.log('sum', sumPrices(menuArray));
-
 
 // TASK B
 
@@ -100,7 +100,6 @@ const loopTheDays = menu => {
 
 loopTheDays(days);
 
-
 // Get only mondays vegan meals
 /*
 console.log(fazerMenu.LunchMenus[0].SetMenus);
@@ -122,5 +121,3 @@ for (const meal of monday) {
 
 console.log('vegan meals', veganDishes);
 */
-
-
