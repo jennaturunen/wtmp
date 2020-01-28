@@ -32,17 +32,17 @@ const testGamePlay = () => {
       console.log('Guessed values in the game', guessHistory);
       resetGame();
 
-      // When the guess is too low change minValue and next guess higher
+      // When the guess is too low change minValue to previous guess and next guess higher
     } else if (correctGuess < 0){
       minValue = newGuess;
       newGuess = Math.round((maxValue + newGuess)/2);
-      console.log('too low, new guess is', newGuess);
+      console.log('guess was too low, new guess is', newGuess);
 
-      // When the guess is too high change maxValue and next guess lower
+      // When the guess is too high change maxValue to previous guess and next guess lower
     } else {
       maxValue = newGuess;
       newGuess = Math.round((minValue + newGuess)/2);
-      console.log('too high, new guess is', newGuess);
+      console.log('guess was too high, new guess is', newGuess);
     }
   }
 
@@ -68,5 +68,5 @@ const avg = array => array.reduce((a,b) => a + b)/array.length;
 const averageGuessCount = avg(guessCounts);
 console.log('average', averageGuessCount);
 
-// Show results in HTML
+// Show results max, min and average of the counts in HTML
 displayResults(maxGuessCount, minGuessCount, averageGuessCount);
