@@ -17,35 +17,35 @@ let glutenFreeMeals = [];
  * Push to glutenFreeMeals-array every meal that includes 'G'
  * Save every 'group' to one p-element and push to FazerMenu-array for later use
  * Display every meal clearly and with correct whitespaces/commas...
- * @param {array} array - array of the days Meal-part from json
+ * @param {array} arrayMeals - array of the days Meal-part from json
  * @param {string} language - current language of the menus on the page
  */
-const loopTheMeals = (array, language) => {
-  console.log('arr', array);
+const loopTheMeals = (arrayMeals, language) => {
+  console.log('arr', arrayMeals);
   const p = document.createElement('p');
 
-  for (let i = 0; i < array.length; i++) {
-    console.log('meal', array[i].Name);
+  for (let i = 0; i < arrayMeals.length; i++) {
+    console.log('meal', arrayMeals[i].Name);
 
-    if (array[i].Diets.includes('G')) {
-      glutenFreeMeals.push(array[i].Name);
+    if (arrayMeals[i].Diets.includes('G')) {
+      glutenFreeMeals.push(arrayMeals[i].Name);
     }
 
-    if (array.length !== 1 && i === array.length - 1) {
+    if (arrayMeals.length !== 1 && i === arrayMeals.length - 1) {
       if (language === 'ENG') {
-        p.textContent += ' and ' + array[i].Name;
+        p.textContent += ' and ' + arrayMeals[i].Name;
       } else {
-        p.textContent += ' ja ' + array[i].Name;
+        p.textContent += ' ja ' + arrayMeals[i].Name;
       }
       break;
     }
 
-    if (i === array.length -2 || array.length === 1) {
-      p.textContent += array[i].Name;
+    if (i === arrayMeals.length -2 || arrayMeals.length === 1) {
+      p.textContent += arrayMeals[i].Name;
       continue;
     }
 
-    p.textContent += array[i].Name + ', ';
+    p.textContent += arrayMeals[i].Name + ', ';
   }
 
   fazerKaramalmiList.appendChild(p);
@@ -55,11 +55,11 @@ const loopTheMeals = (array, language) => {
 
 /**
  * Loop throw the dishes to get all the meals in correct language
- * @param {array} array - Array of the days SetMenus-part from json
+ * @param {array} arraySetMenus - Array of the days SetMenus-part from json
  * @param {string} language - Current language on the page
  */
-const loopTheDishes = (array, language) => {
-  for (const dish of array) {
+const loopTheDishes = (arraySetMenus, language) => {
+  for (const dish of arraySetMenus) {
     console.log('dish', dish);
     if (language === 'FI') {
       loopTheMeals(dish.Meals, 'FI');
@@ -96,11 +96,11 @@ loopTheDishes(FazerFiMenu.LunchMenus[0].SetMenus, 'FI');
 
 /**
  * Display/Create Fazermenu from the array
- * @param {array} array - (Sorted) FazerMenu-array
+ * @param {array} arraySorted - (Sorted) FazerMenu-array
  */
-const displayFazerMenu = (array) => {
+const displayFazerMenu = (arraySorted) => {
   fazerKaramalmiList.innerHTML = '';
-  for (const meal of array) {
+  for (const meal of arraySorted) {
     const p = document.createElement('p');
     p.textContent = meal;
     fazerKaramalmiList.appendChild(p);
