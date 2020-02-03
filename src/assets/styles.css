@@ -21,12 +21,12 @@ nav {
   margin: 1rem;
 }
 
-ul {
+nav > ul {
   display: flex;
   list-style-type: none;
 }
 
-li {
+nav > li {
   font-size: 1.3rem;
   color: var(--dark-red);
   font-weight: bold;

@@ -1,5 +1,35 @@
-import {createSodexoMenu, getSodexoMenu} from './modules/sodexo-data';
-import {createFazerMenu} from './modules/fazer-data';
+import SodexoData from './modules/sodexo-data';
+import FazerData from './modules/fazer-data';
+
+
+const fazerRandomBtn = document.querySelector('#fazerRandomBtn');
+const fazerAscBtn = document.querySelector('#fazerAscBtn');
+const fazerDescBtn = document.querySelector('#fazerDescBtn');
+const fazerGlutenFreeBtn = document.querySelector('#fazerGlutenFreeBtn');
+
+const sodexoAscBtn = document.querySelector('#sodexoAscBtn');
+const sodexoDescBtn = document.querySelector('#sodexoDescBtn');
+const sodexoRandomBtn = document.querySelector('#sodexoRandomBtn');
+const sodexoGlutenFreeBtn = document.querySelector('#sodexoGlutenFreeBtn');
+const languageBtn = document.querySelector('.language');
+
+
+const createMenu = (restaurant, array) => {
+  const place = document.querySelector(`#${restaurant}List`);
+  place.innerHtml = '';
+  console.log('create', array);
+  const ul = document.createElement('ul');
+  for (const meal of array) {
+    const li = document.createElement('li');
+    console.log(meal);
+    console.log(meal[0][0]);
+
+    li.textContent += meal[0][0];
+    ul.append(li);
+
+  }
+  place.appendChild(ul);
+};
 
 
 /** Change the language of every menu with the button */
@@ -58,5 +88,12 @@ const chooseRandomDish = array => {
   return array[randomIndex];
 };
 
+createMenu('sodexo', SodexoData.finnishMenuArray);
+createMenu('fazer', FazerData.finnishMenuArray);
 
-export {chooseRandomDish, sortArray};
+
+console.log('index', SodexoData);
+console.log('index', SodexoData.finnishMenuArray[1]);
+
+console.log('fasu', FazerData);
+console.log('index', FazerData.finnishMenuArray[1]);
