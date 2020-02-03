@@ -50,54 +50,35 @@ touchableElement.addEventListener("touchstart", () => {
 });
 
 //--------- TASK 4 -------- //
-/*
-const countfifth = () => {
-  let counter = 1;
-  let timer = setInterval(() => {
-    console.log(`${counter++}. tick.`);
-    if (counter > 15) {
-      clearInterval(timer);
-      mouseStop();
-    }
-  }, 1000);
+
+// Alert user after 15 seconds of browsing and print text to document
+const browsingTime = 15000;
+const notificationH4 = document.querySelector('h4');
+
+const alertUser = () => {
+  console.log('Hurry up!');
+  //alert('Hurry up!');
+  notificationH4.textContent = 'Hurry up!';
 };
 
-const mouseStop = () => {
-  console.log("loopu");
-};
+const timer = setInterval(alertUser, browsingTime);
 
-let counter = 0;
-liikkuuko = false;
-let time = 4000;
-let touchInterval;
-
-const noAction = () => {
-  console.log('noaction');
-};
-
-const startInt = () => {
-  clearInterval(touchInterval);
-  touchInterval = setInterval(noAction, 3000);
-};
-
-document.addEventListener('mousemove', startInt);
-*/
 
 //--------- TASK 5 -------- //
 
 // After 15seconds of idling, alert the user and print text to document
-const time = 15000;
+const idlingTime = 15000;
 let timeoutId;
-const notification = document.querySelector('h3');
+const notificationH3 = document.querySelector('h3');
 
 const timeHasElapsed = () => {
   console.log('hurry up');
-  alert('Hurry up!');
-  notification.textContent = 'Hurry up, 15 seconds has elapsed!';
+  //alert('Hurry up!');
+  notificationH3.textContent = 'Hurry up, 15 seconds has elapsed!';
 };
 
 const startTimer = () => {
-  timeoutId = window.setTimeout(timeHasElapsed, time);
+  timeoutId = window.setTimeout(timeHasElapsed, idlingTime);
 };
 
 const resetTimer = () => {
