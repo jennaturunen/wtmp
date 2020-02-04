@@ -12,7 +12,7 @@ let englishMenuArray = [];
  */
 const loopTheMeals = (arrayMeals, language) => {
   // Create dishes-array that includes dish names and diets
-  const dishes = arrayMeals.map(dish => `${dish.Name} (${dish.Diets.join(', ')})`);
+  let dishes = arrayMeals.map(dish => `${dish.Name} (${dish.Diets.join(', ')})`);
   // Convert dishes-array to string separated by commas
   dishes = dishes.join(', ');
 
