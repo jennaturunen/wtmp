@@ -1,99 +1,126 @@
 import SodexoData from './modules/sodexo-data';
 import FazerData from './modules/fazer-data';
 
+const randomBtn = document.querySelector('#randomBtn');
+const languageButton = document.querySelector('.language');
+const ascBtn = document.querySelector('#ascBtn');
+const descBtn = document.querySelector('#descBtn');
 
-const fazerRandomBtn = document.querySelector('#fazerRandomBtn');
-const fazerAscBtn = document.querySelector('#fazerAscBtn');
-const fazerDescBtn = document.querySelector('#fazerDescBtn');
-const fazerGlutenFreeBtn = document.querySelector('#fazerGlutenFreeBtn');
-
-const sodexoAscBtn = document.querySelector('#sodexoAscBtn');
-const sodexoDescBtn = document.querySelector('#sodexoDescBtn');
-const sodexoRandomBtn = document.querySelector('#sodexoRandomBtn');
-const sodexoGlutenFreeBtn = document.querySelector('#sodexoGlutenFreeBtn');
-const languageBtn = document.querySelector('.language');
+// Create empty arrays for days menu
+let sodexoMenu = [];
+let fazerMenu = [];
 
 
-const createMenu = (restaurant, array) => {
+/**
+ * Create restaurants menu
+ * @param {*} restaurant - name of the restaurant
+ * @param {*} dataArray - array of the restaurants menu
+ * @returns list of the created menu for sorting...
+ */
+const createMenu = (restaurant, dataArray) => {
   const place = document.querySelector(`#${restaurant}List`);
-  place.innerHtml = '';
-  console.log('create', array);
+  // List updates the sodexo/fazerMenu
+  const list = [];
+  place.innerHTML = '';
   const ul = document.createElement('ul');
-  for (const meal of array) {
-    const li = document.createElement('li');
-    console.log(meal);
-    console.log(meal[0][0]);
 
-    li.textContent += meal[0][0];
+  for (const meal of dataArray) {
+    const li = document.createElement('li');
+    li.textContent += meal;
     ul.append(li);
 
+    list.push(meal);
   }
+
   place.appendChild(ul);
+  return list;
 };
 
 
 /** Change the language of every menu with the button */
-const buttons = document.querySelectorAll('.language');
-
-for (const btn of buttons) {
-  btn.addEventListener('click', () => {
-    if (btn.textContent === 'ENG') {
-      createSodexoMenu(getSodexoMenu('ENG'));
-      createFazerMenu('ENG');
-      for (const btn of buttons) {
-        btn.textContent = 'FI';
-      }
-    } else {
-      createSodexoMenu(getSodexoMenu('FI'));
-      createFazerMenu('FI');
-      for (const btn of buttons) {
-        btn.textContent = 'ENG';
-      }
-    }
-  });
-}
+languageButton.addEventListener('click', () => {
+  if (languageButton.textContent === 'ENG') {
+    fazerMenu = createMenu('fazer', FazerData.englishMenuArray);
+    sodexoMenu = createMenu('sodexo', SodexoData.englishMenuArray);
+    languageButton.textContent = 'FI';
+  } else {
+    fazerMenu = createMenu('fazer', FazerData.finnishMenuArray);
+    sodexoMenu = createMenu('sodexo', SodexoData.finnishMenuArray);
+    languageButton.textContent = 'ENG';
+  }
+});
 
 
 /** Show/hide dropdown for sorting */
-const dropDownBars = document.querySelectorAll('.sort');
+const dropDownBar = document.querySelector('.sort');
 
-for (const dropdown of dropDownBars) {
-  dropdown.addEventListener('click', e => {
-    e.target.nextElementSibling.classList.toggle('show');
-  });
-}
+dropDownBar.addEventListener('click', e => {
+  e.target.nextElementSibling.classList.toggle('show');
+});
 
 
 /**
  * Sort menu-arrays in wanted order
  * @param {string} sort - wanted direction to sort
- * @param {*} array - wanted array to be sorted
+ * @param {Array} menuArray - wanted array to be sorted
+ * @returns {Array} sorted menuArray
  */
-const sortArray = (sort, array) => {
-  array.sort();
+const sortArray = (sort, menuArray) => {
+  menuArray.sort();
 
   if (sort === 'asc') {
-    array.reverse();
+    menuArray.reverse();
   }
 
-  return array;
+  return menuArray;
 };
+
+
+/**
+ * Create menus in descending order
+ */
+descBtn.addEventListener('click', () => {
+  const sortedSodexo = sortArray('desc', sodexoMenu);
+  createMenu('sodexo', sortedSodexo);
+
+  const sortedFazer = sortArray('desc', fazerMenu);
+  createMenu('fazer', sortedFazer);
+});
+
+
+/**
+ *  Create menus in ascending order
+ */
+ascBtn.addEventListener('click', () => {
+  const sortedSodexo = sortArray('asc', sodexoMenu);
+  createMenu('sodexo', sortedSodexo);
+
+  const sortedFazer = sortArray('asc', fazerMenu);
+  createMenu('fazer', sortedFazer);
+});
+
 
 /**
  * Select and return the random dish
- * @param {array} array - Array from where the random dish gets picked
+ * @param {array} menuArray - Array from where the random dish gets picked
  */
-const chooseRandomDish = array => {
-  const randomIndex = Math.floor(Math.random() * array.length);
-  return array[randomIndex];
+const chooseRandomDish = menuArray => {
+  const randomIndex = Math.floor(Math.random() * menuArray.length);
+  return menuArray[randomIndex];
 };
 
-createMenu('sodexo', SodexoData.finnishMenuArray);
-createMenu('fazer', FazerData.finnishMenuArray);
+
+// Display random dish from both of the menus
+randomBtn.addEventListener('click', () => {
+  const randomFazer = chooseRandomDish(fazerMenu);
+  document.querySelector('#fazerList').textContent = randomFazer;
+
+  const randomSodexo = chooseRandomDish(sodexoMenu);
+  document.querySelector('#sodexoList').textContent = randomSodexo;
+});
 
 
-console.log('index', SodexoData);
-console.log('index', SodexoData.finnishMenuArray[1]);
+// Create menus in Finnish by default
+sodexoMenu = createMenu('sodexo', SodexoData.finnishMenuArray);
+fazerMenu = createMenu('fazer', FazerData.finnishMenuArray);
 
-console.log('fasu', FazerData);
-console.log('index', FazerData.finnishMenuArray[1]);

@@ -11,21 +11,17 @@ let englishMenuArray = [];
  * @param {*} language - Wanted language
  */
 const loopTheMeals = (arrayMeals, language) => {
-  console.log(arrayMeals);
+  // Create dishes-array that includes dish names and diets
+  const dishes = arrayMeals.map(dish => `${dish.Name} (${dish.Diets.join(', ')})`);
+  // Convert dishes-array to string separated by commas
+  dishes = dishes.join(', ');
 
-  const names = arrayMeals.join(', ');
-  console.log('names', names.Name);
-  for (const meals of arrayMeals) {
-    const diets = meals.Diets.join(', ');
-
-    if (language === 'FI') {
-      finnishMenuArray.push([[names, diets]]);
-    } else {
-      englishMenuArray.push([[meals.Name, diets]]);
-    }
-  };
+  if (language === 'FI') {
+    finnishMenuArray.push(dishes);
+  } else {
+    englishMenuArray.push(dishes);
+  }
 };
-
 
 /**
  * Create FazerMenus to correct arrays in wanted language and pick the day
@@ -45,15 +41,13 @@ const createFazerMenu = (language, dayOfWeek) => {
       loopTheMeals(dish.Meals, 'ENG');
     }
   }
-
 };
 
-console.log('menu', FazerEngMenu);
 
 // Get the menus to the arrays
 createFazerMenu('FI', 0);
 createFazerMenu('EN', 0);
 
-const FazerData = {finnishMenuArray, englishMenuArray};
+const FazerData = { finnishMenuArray, englishMenuArray };
 
 export default FazerData;
