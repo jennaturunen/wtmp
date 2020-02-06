@@ -10,7 +10,6 @@ const descBtn = document.querySelector('#descBtn');
 let sodexoMenu = [];
 let fazerMenu = [];
 
-
 /**
  * Create restaurants menu
  * @param {*} restaurant - name of the restaurant
