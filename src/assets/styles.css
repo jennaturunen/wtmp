@@ -157,3 +157,9 @@ button {
 .drop {
   position: relative;
 }
+
+.weeklyList {
+  display: flex;
+  font-size: .9rem;
+  margin: 2rem;
+}

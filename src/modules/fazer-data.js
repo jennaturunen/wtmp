@@ -1,53 +1,105 @@
-import FazerFiMenu from '../assets/json-data/fazer-fi';
-import FazerEngMenu from '../assets/json-data/fazer-eng';
+'use strict';
 
-/** Save one days menu to array for later use */
-let finnishMenuArray = [];
-let englishMenuArray = [];
+import { fetchMenuData } from './network-data';
+
+const proxyURL = 'https://cors-anywhere.herokuapp.com/';
+const fiURL = 'https://www.fazerfoodco.fi/api/restaurant/menu/week?language=fi&restaurantPageId=270540&weekDate=';
+const enURL ='https://www.fazerfoodco.fi/api/restaurant/menu/week?language=en&restaurantPageId=270540&weekDate=';
 
 /**
- * Loop throw all the meals and push the meals and diets to array
- * @param {*} arrayMeals - Meals part from json-file
- * @param {*} language - Wanted language
+ * Create days Fazermenu in a list
+ * @param {*} menuData - JSON-data of the days menus in wanted language
+ * @returns List of the days meals in a string
  */
-const loopTheMeals = (arrayMeals, language) => {
-  // Create dishes-array that includes dish names and diets
-  let dishes = arrayMeals.map(dish => `${dish.Name} (${dish.Diets.join(', ')})`);
-  // Convert dishes-array to string separated by commas
-  dishes = dishes.join(', ');
+const getDaysMenu = async menuData => {
+  // Get the index of the current day
+  const dayOfWeek = new Date().getDay();
 
-  if (language === 'FI') {
-    finnishMenuArray.push(dishes);
-  } else {
-    englishMenuArray.push(dishes);
-  }
+  // Get the Finnish menu
+  let listOfDaysMenu = menuData.LunchMenus[dayOfWeek - 1].SetMenus.map(
+    setMenu => {
+      // Go through meals and pick meal names and diets
+      let meals = setMenu.Meals.map(
+        meal => `${meal.Name} (${meal.Diets.join(', ')})`
+      );
+      // Convert meals array to string separated by commas
+      meals = meals.join(', ');
+      return meals;
+    }
+  );
+
+  return listOfDaysMenu;
 };
 
+
 /**
- * Create FazerMenus to correct arrays in wanted language and pick the day
+ * Create weekly Fazer-menu in an array
+ * @param {*} menuData JSON-data of the weekly menus
+ * @returns Array that includes every days meals
+ */
+const getWeeklyMenuArray = async (menuData) => {
+  let weeklyMenuArray = [];
+
+  // Get the daily menus
+  for (const day of menuData.LunchMenus) {
+    let dailyMenuArray = day.SetMenus.map(setMenu => {
+      // Go through meals and pick meal names and diets
+      let meals = setMenu.Meals.map(
+        meal => `${meal.Name} (${meal.Diets.join(', ')})`
+      );
+      // Convert meals array to string separated by commas
+      meals = meals.join(', ');
+      return meals;
+    });
+
+    // Add the menu of the day to the weekly-list
+    weeklyMenuArray.push(dailyMenuArray);
+  }
+
+  // Remove weekends from the list
+  weeklyMenuArray = weeklyMenuArray.slice(0, 5);
+  return weeklyMenuArray;
+};
+
+
+/**
+ * Get and return the wanted FazerMenu
+ * @param {*} wantedMenu - day or weekly menu
  * @param {*} language - Wanted language of the menu
- * @param {*} dayOfWeek - Choose which days menu to get
+ * @returns Wanted menu in a daily-string or weekly-array
  */
-const createFazerMenu = (language, dayOfWeek) => {
-  let lunchList = '';
-  if (language === 'FI') {
-    lunchList = FazerFiMenu.LunchMenus[dayOfWeek].SetMenus;
-    for (const dish of lunchList) {
-      loopTheMeals(dish.Meals, 'FI');
+const getData = async (wantedMenu, language) => {
+  // Get todays date in YYYY-MM-DD
+  const today = new Date().toISOString().slice(0, 10);
+
+  try {
+    let response;
+    let menuJSON;
+
+    // Get the JSON from network-data.js and convert it to array in correct language
+    if (language === 'FI') {
+      menuJSON = await fetchMenuData(proxyURL + fiURL + today); // get todays data (empty on the weekends)
+      if (wantedMenu === 'day') {
+        response = getDaysMenu(menuJSON);
+      } else {
+        response = getWeeklyMenuArray(menuJSON);
+      }
+      // When creating English menu
+    } else {
+      menuJSON = await fetchMenuData(proxyURL + enURL + today);
+      if (wantedMenu === 'day') {
+        response = getDaysMenu(menuJSON);
+      } else {
+        response = getWeeklyMenuArray(menuJSON);
+      }
     }
-  } else {
-    lunchList = FazerEngMenu.LunchMenus[dayOfWeek].SetMenus;
-    for (const dish of lunchList) {
-      loopTheMeals(dish.Meals, 'ENG');
-    }
+
+    return response;
+  } catch (error) {
+    console.log(error);
   }
 };
 
-
-// Get the menus to the arrays
-createFazerMenu('FI', 0);
-createFazerMenu('EN', 0);
-
-const FazerData = { finnishMenuArray, englishMenuArray };
+const FazerData = { getData };
 
 export default FazerData;

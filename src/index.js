@@ -7,8 +7,13 @@ const ascBtn = document.querySelector('#ascBtn');
 const descBtn = document.querySelector('#descBtn');
 
 // Create empty arrays for days menu
-let sodexoMenu = [];
-let fazerMenu = [];
+let sodexoDayMenu = [];
+let fazerDayMenu = [];
+
+// Save names of the days to an array for weekly menu
+const daysInFinnish = ['Maanantai','Tiistai','Keskiviikko','Torstai','Perjantai'];
+const daysInEnglish = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+
 
 /**
  * Create restaurants menu
@@ -16,11 +21,12 @@ let fazerMenu = [];
  * @param {*} dataArray - array of the restaurants menu
  * @returns list of the created menu for sorting...
  */
-const createMenu = (restaurant, dataArray) => {
+const createDailyMenu = (restaurant, dataArray) => {
   const place = document.querySelector(`#${restaurant}List`);
-  // List updates the sodexo/fazerMenu
-  const list = [];
   place.innerHTML = '';
+
+  // List updates the sodexo/fazerDayMenu-array
+  const list = [];
   const ul = document.createElement('ul');
 
   for (const meal of dataArray) {
@@ -36,16 +42,57 @@ const createMenu = (restaurant, dataArray) => {
 };
 
 
+/**
+ * Create the whole weeks list
+ * @param {*} restaurant - The restaurant which menu will be displayed
+ * @param {*} weeksDataArray - Whole weeks menu in an array
+ */
+const createWeeklyMenu = (restaurant, language, weeksDataArray) => {
+  const place = document.querySelector(`#${restaurant}WeeklyList`);
+  place.innerHTML = '';
+  let dayOfWeekIndex = 0;
+
+  // Create menus for each day in different lists
+  for (const day of weeksDataArray) {
+    // Put days name as a header for the list in correct language
+    const h3 = document.createElement('h3');
+
+    if (language === 'FI') {
+      h3.textContent = daysInFinnish[dayOfWeekIndex];
+    } else {
+      h3.textContent = daysInEnglish[dayOfWeekIndex];
+    }
+
+    dayOfWeekIndex++;
+
+    const ul = document.createElement('ul');
+    ul.appendChild(h3);
+
+    for (const item of day) {
+      // Create and append every dish as a list-element
+      const li = document.createElement('li');
+      li.textContent = item;
+      ul.append(li);
+      place.append(ul);
+    }
+  }
+};
+
+
 /** Change the language of every menu with the button */
-languageButton.addEventListener('click', () => {
-  if (languageButton.textContent === 'ENG') {
-    fazerMenu = createMenu('fazer', FazerData.englishMenuArray);
-    sodexoMenu = createMenu('sodexo', SodexoData.englishMenuArray);
+languageButton.addEventListener('click', async () => {
+  const lang = languageButton.textContent;
+
+  sodexoDayMenu = createDailyMenu('sodexo', await SodexoData.getData('day', lang));
+  createWeeklyMenu('sodexo', lang, await SodexoData.getData('weekly', lang));
+
+  fazerDayMenu = createDailyMenu('fazer', await FazerData.getData('day', lang));
+  createWeeklyMenu('fazer', lang, await FazerData.getData('weekly', lang));
+
+  if (languageButton.textContent === 'EN') {
     languageButton.textContent = 'FI';
   } else {
-    fazerMenu = createMenu('fazer', FazerData.finnishMenuArray);
-    sodexoMenu = createMenu('sodexo', SodexoData.finnishMenuArray);
-    languageButton.textContent = 'ENG';
+    languageButton.textContent = 'EN';
   }
 });
 
@@ -79,11 +126,11 @@ const sortArray = (sort, menuArray) => {
  * Create menus in descending order
  */
 descBtn.addEventListener('click', () => {
-  const sortedSodexo = sortArray('desc', sodexoMenu);
-  createMenu('sodexo', sortedSodexo);
+  const sortedSodexo = sortArray('desc', sodexoDayMenu);
+  createDailyMenu('sodexo', sortedSodexo);
 
-  const sortedFazer = sortArray('desc', fazerMenu);
-  createMenu('fazer', sortedFazer);
+  const sortedFazer = sortArray('desc', fazerDayMenu);
+  createDailyMenu('fazer', sortedFazer);
 });
 
 
@@ -91,11 +138,11 @@ descBtn.addEventListener('click', () => {
  *  Create menus in ascending order
  */
 ascBtn.addEventListener('click', () => {
-  const sortedSodexo = sortArray('asc', sodexoMenu);
-  createMenu('sodexo', sortedSodexo);
+  const sortedSodexo = sortArray('asc', sodexoDayMenu);
+  createDailyMenu('sodexo', sortedSodexo);
 
-  const sortedFazer = sortArray('asc', fazerMenu);
-  createMenu('fazer', sortedFazer);
+  const sortedFazer = sortArray('asc', fazerDayMenu);
+  createDailyMenu('fazer', sortedFazer);
 });
 
 
@@ -109,17 +156,32 @@ const chooseRandomDish = menuArray => {
 };
 
 
-// Display random dish from both of the menus
+/**
+ *  Display random dish from both of the menus
+ */
 randomBtn.addEventListener('click', () => {
-  const randomFazer = chooseRandomDish(fazerMenu);
+  const randomFazer = chooseRandomDish(fazerDayMenu);
   document.querySelector('#fazerList').textContent = randomFazer;
 
-  const randomSodexo = chooseRandomDish(sodexoMenu);
+  const randomSodexo = chooseRandomDish(sodexoDayMenu);
   document.querySelector('#sodexoList').textContent = randomSodexo;
 });
 
 
-// Create menus in Finnish by default
-sodexoMenu = createMenu('sodexo', SodexoData.finnishMenuArray);
-fazerMenu = createMenu('fazer', FazerData.finnishMenuArray);
+/**
+ * Create all menus in Finnish by default
+ */
+const initMenus = async () => {
+  try {
+    sodexoDayMenu = createDailyMenu('sodexo', await SodexoData.getData('day', 'FI'));
+    createWeeklyMenu('sodexo', 'FI', await SodexoData.getData('weekly', 'FI'));
 
+    fazerDayMenu = createDailyMenu('fazer', await FazerData.getData('day', 'FI'));
+    createWeeklyMenu('fazer', 'FI', await FazerData.getData('weekly', 'FI'));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+initMenus();
