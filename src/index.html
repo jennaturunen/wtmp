@@ -15,7 +15,19 @@
         <li>Yhteystiedot</li>
       </ul>
       <label>
-        <input placeholder="Hae ravintolan nimellä" />
+        <input id="searchByRestaurant" placeholder="Hae ravintolaa nimellä"/>
+        <button id="searchRestaurantBtn">Hae ravintolan nimellä</button>
+        <button id="showAllRestaurantsBtn">Näytä kaikki listat</button>
+      </label>
+      <label>
+        <input id="searchByAllergies" list="allergies" placeholder="Hae erityisruokavalion mukaan"/>
+        <datalist id="allergies">
+          <option value="Veg">Vegaaninen</option>
+          <option value="L">Laktoositon</option>
+          <option value="M">Maidoton</option>
+          <option value="G">Gluteeniton</option>
+        </datalist>
+        <button id="searchByAllergiesBtn">Hae erityisruokavaliota</button>
       </label>
     </nav>
 

@@ -51,7 +51,6 @@ const createWeeklyMenu = (restaurant, language, weeksDataArray) => {
   const place = document.querySelector(`#${restaurant}WeeklyList`);
   place.innerHTML = '';
   let dayOfWeekIndex = 0;
-
   // Create menus for each day in different lists
   for (const day of weeksDataArray) {
     // Put days name as a header for the list in correct language
@@ -178,6 +177,7 @@ const initMenus = async () => {
 
     fazerDayMenu = createDailyMenu('fazer', await FazerData.getData('day', 'FI'));
     createWeeklyMenu('fazer', 'FI', await FazerData.getData('weekly', 'FI'));
+
   } catch (error) {
     console.log(error);
   }
@@ -185,3 +185,70 @@ const initMenus = async () => {
 
 
 initMenus();
+
+
+const allRestaurantContainers = document.querySelectorAll('.restaurant');
+const searchByRestaurant = document.querySelector('#searchByRestaurant');
+const searchByRestaurantBtn = document.querySelector('#searchRestaurantBtn');
+const showAllRestaurantsBtn = document.querySelector('#showAllRestaurantsBtn');
+
+/**
+ * Compare the value user has typed to every restaurants name and show those which include the value
+ */
+searchByRestaurantBtn.addEventListener('click', () => {
+  // Convert input value and the restaurants name to lowercase
+  const searchedRestaurant = searchByRestaurant.value.toLowerCase();
+
+  // Hide every restaurant from the page
+  for (const restaurantContainer of allRestaurantContainers) {
+    restaurantContainer.style.display = 'none';
+    const h3 = restaurantContainer.firstElementChild.textContent.toLowerCase();
+
+    // Show only restaurants that include the value
+    if (h3.includes(searchedRestaurant)) {
+      restaurantContainer.style.display = 'flex';
+    }
+  }
+});
+
+/**
+ *  Show all restaurant lists
+ */
+showAllRestaurantsBtn.addEventListener('click', () => {
+  for (const restaurantContainer of allRestaurantContainers) {
+    restaurantContainer.style.display = 'flex';
+  }
+});
+
+
+const allergyBtn = document.querySelector('#searchByAllergiesBtn');
+const allergies = document.querySelector('#searchByAllergies');
+
+allergyBtn.addEventListener('click', () => {
+  const allergyValue = allergies.value;
+
+  const menus = {sodexo: sodexoDayMenu, fazer: fazerDayMenu};
+
+  Object.entries(menus).forEach(([restaurant, menuArray]) => {
+    searchByAllergy(allergyValue, restaurant, menuArray);
+  });
+});
+
+const searchByAllergy = (allergyValue, place, menuArray) => {
+  let list = [];
+
+  for (const dish of menuArray) {
+      const splittedDish = dish.split('(');
+
+      if (splittedDish[1].includes(allergyValue)) {
+        list.push(dish);
+      }
+  }
+
+  createDailyMenu(place, list);
+
+};
+
+
+
+
