@@ -184,8 +184,6 @@ const initMenus = async () => {
 };
 
 
-initMenus();
-
 
 const allRestaurantContainers = document.querySelectorAll('.restaurant');
 const searchByRestaurant = document.querySelector('#searchByRestaurant');
@@ -224,6 +222,9 @@ showAllRestaurantsBtn.addEventListener('click', () => {
 const allergyBtn = document.querySelector('#searchByAllergiesBtn');
 const allergies = document.querySelector('#searchByAllergies');
 
+/**
+ *  Get the allergy-value user has selected and search from the daily menus all the matching dishes
+ */
 allergyBtn.addEventListener('click', () => {
   const allergyValue = allergies.value;
 
@@ -234,6 +235,13 @@ allergyBtn.addEventListener('click', () => {
   });
 });
 
+
+/**
+ * Get every dish from the menuArray that includes the allergy and display only those dishes
+ * @param {*} allergyValue - Allergy property that user wants to search (Vegan, glutenfree...)
+ * @param {*} place - Restaurants name
+ * @param {*} menuArray - MenuArray of the restaurants dishes
+ */
 const searchByAllergy = (allergyValue, place, menuArray) => {
   let list = [];
 
@@ -246,9 +254,7 @@ const searchByAllergy = (allergyValue, place, menuArray) => {
   }
 
   createDailyMenu(place, list);
-
 };
 
 
-
-
+initMenus();
