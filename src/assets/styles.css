@@ -163,3 +163,18 @@ button {
   font-size: .9rem;
   margin: 2rem;
 }
+
+.darkTheme {
+  background-color: #4a4949;
+  color: white;
+}
+
+.lightTheme {
+  background-color: white;
+  color: black;
+}
+
+.blueTheme {
+  background-color: #00003e;
+  color: white;
+}

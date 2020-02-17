@@ -66,7 +66,7 @@ const getWeeklyMenuArray = async (menuData) => {
  * Get and return the wanted FazerMenu
  * @param {*} wantedMenu - day or weekly menu
  * @param {*} language - Wanted language of the menu
- * @returns Wanted menu in a daily-string or weekly-array
+ * @returns Wanted menu in a daily-string or weekly-array in correct language
  */
 const getData = async (wantedMenu, language) => {
   // Get todays date in YYYY-MM-DD
@@ -76,16 +76,18 @@ const getData = async (wantedMenu, language) => {
     let response;
     let menuJSON;
 
-    // Get the JSON from network-data.js and convert it to array in correct language
+    // Get menu in Finnish
     if (language === 'FI') {
+      // Get the JSON from network-data.js and convert it to daily-string or weekly-array
       menuJSON = await fetchMenuData(proxyURL + fiURL + today); // get todays data (empty on the weekends)
       if (wantedMenu === 'day') {
         response = getDaysMenu(menuJSON);
       } else {
         response = getWeeklyMenuArray(menuJSON);
       }
-      // When creating English menu
+      // Get menu in English
     } else {
+      // Get the JSON from network-data.js and convert it to daily-string or weekly-array
       menuJSON = await fetchMenuData(proxyURL + enURL + today);
       if (wantedMenu === 'day') {
         response = getDaysMenu(menuJSON);

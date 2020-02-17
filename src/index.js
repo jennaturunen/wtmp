@@ -22,6 +22,7 @@ const daysInEnglish = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
  * @returns list of the created menu for sorting...
  */
 const createDailyMenu = (restaurant, dataArray) => {
+  console.log('arr', dataArray);
   const place = document.querySelector(`#${restaurant}List`);
   place.innerHTML = '';
 
@@ -96,12 +97,15 @@ languageButton.addEventListener('click', async () => {
 });
 
 
-/** Show/hide dropdown for sorting */
-const dropDownBar = document.querySelector('.sort');
+/** Show/hide dropdown for sorting and changing the color-theme */
+const dropDownBar = document.querySelectorAll('.sort');
 
-dropDownBar.addEventListener('click', e => {
-  e.target.nextElementSibling.classList.toggle('show');
-});
+for (const dropDown of dropDownBar) {
+  dropDown.addEventListener('click', e => {
+    e.target.nextElementSibling.classList.toggle('show');
+  });
+
+}
 
 
 /**
@@ -167,30 +171,9 @@ randomBtn.addEventListener('click', () => {
 });
 
 
-/**
- * Create all menus in Finnish by default
- */
-const initMenus = async () => {
-  try {
-    sodexoDayMenu = createDailyMenu('sodexo', await SodexoData.getData('day', 'FI'));
-    createWeeklyMenu('sodexo', 'FI', await SodexoData.getData('weekly', 'FI'));
-
-    fazerDayMenu = createDailyMenu('fazer', await FazerData.getData('day', 'FI'));
-    createWeeklyMenu('fazer', 'FI', await FazerData.getData('weekly', 'FI'));
-
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-
-initMenus();
-
-
 const allRestaurantContainers = document.querySelectorAll('.restaurant');
 const searchByRestaurant = document.querySelector('#searchByRestaurant');
 const searchByRestaurantBtn = document.querySelector('#searchRestaurantBtn');
-const showAllRestaurantsBtn = document.querySelector('#showAllRestaurantsBtn');
 
 /**
  * Compare the value user has typed to every restaurants name and show those which include the value
@@ -214,6 +197,8 @@ searchByRestaurantBtn.addEventListener('click', () => {
 /**
  *  Show all restaurant lists
  */
+const showAllRestaurantsBtn = document.querySelector('#showAllRestaurantsBtn');
+
 showAllRestaurantsBtn.addEventListener('click', () => {
   for (const restaurantContainer of allRestaurantContainers) {
     restaurantContainer.style.display = 'flex';
@@ -224,6 +209,9 @@ showAllRestaurantsBtn.addEventListener('click', () => {
 const allergyBtn = document.querySelector('#searchByAllergiesBtn');
 const allergies = document.querySelector('#searchByAllergies');
 
+/**
+ *  Get the allergy-value user has selected and search from the daily menus all the matching dishes
+ */
 allergyBtn.addEventListener('click', () => {
   const allergyValue = allergies.value;
 
@@ -234,6 +222,13 @@ allergyBtn.addEventListener('click', () => {
   });
 });
 
+
+/**
+ * Get every dish from the menuArray that includes the allergy and display only those dishes
+ * @param {*} allergyValue - Allergy property that user wants to search (Vegan, glutenfree...)
+ * @param {*} place - Restaurants name
+ * @param {*} menuArray - MenuArray of the restaurants dishes
+ */
 const searchByAllergy = (allergyValue, place, menuArray) => {
   let list = [];
 
@@ -246,9 +241,127 @@ const searchByAllergy = (allergyValue, place, menuArray) => {
   }
 
   createDailyMenu(place, list);
-
 };
 
 
+/**
+ *  Change color-theme by clicking the button
+ *  Replace the old theme-value with the new theme
+ */
+const themeButtons= document.querySelectorAll('.themeBtn');
+
+for (const themeBtn of themeButtons) {
+  themeBtn.addEventListener('click', (e) => {
+    const previousTheme = localStorage.getItem('theme');
+    const newTheme = e.target.id;
+    localStorage.setItem('theme', newTheme);
+    updateUI(previousTheme);
+  });
+
+}
+
+/**
+ * Update the colors on the page by removing the previousTheme and adding the newTheme to classlist
+ * @param {*} previousTheme - The previous color-theme
+ */
+const updateUI = (previousTheme) => {
+  const newTheme = localStorage.getItem('theme');
+  const infoText = document.querySelector('.info-text');
+  const restaurantContainers = document.querySelectorAll('.restaurant');
+
+  document.body.classList.remove(previousTheme);
+  document.body.classList.add(newTheme);
+
+  infoText.classList.remove(previousTheme);
+  infoText.classList.add(newTheme);
+
+  for (const restaurant of restaurantContainers) {
+    restaurant.classList.remove(previousTheme);
+    restaurant.classList.add(newTheme);
+  }
+};
 
 
+/**
+ *  Make every restaurant-article draggable, user can change the places of the restaurants
+ */
+let id;
+const draggableDivs = document.querySelectorAll('.draggable');
+
+// Allow elements to been dropped
+const allowDrop = (e) => {
+  e.preventDefault();
+};
+
+// When dropping the element, save the order of the restaurants to the localStorage
+const drop = (e) => {
+  e.target.append(document.getElementById(id));
+  const draggables = document.querySelectorAll('.draggable');
+
+  let orderInList = [];
+  for (const div of draggables) {
+    orderInList.push(div.id);
+  }
+
+  localStorage.setItem('order', orderInList);
+};
+
+// Save the id of the moving element
+const dragStart = (e) => {
+  id = e.target.id;
+};
+
+
+for (const restaurantContainer of allRestaurantContainers) {
+  restaurantContainer.addEventListener('dragover', allowDrop);
+  restaurantContainer.addEventListener('drop', drop);
+}
+
+for (const div of draggableDivs) {
+  div.addEventListener('dragstart', dragStart);
+}
+
+
+/**
+ *  When loading the page, get the last order of the restaurants and place them correctly
+ */
+const updateOrderOfTheRestaurants = () => {
+  const orderInString = localStorage.getItem('order');
+  // If user has changed the order
+  if (orderInString) {
+    const orderInArray = orderInString.split(',');
+
+    for (let i = 0; i < orderInArray.length;) {
+      for (const dragDiv of draggableDivs) {
+        if (dragDiv.id === orderInArray[i]) {
+          allRestaurantContainers[i].append(dragDiv);
+          i++;
+        }
+      }
+    }
+  }
+};
+
+
+/**
+ * Create all menus in Finnish by default
+ */
+const initMenus = async () => {
+  try {
+    sodexoDayMenu = createDailyMenu('sodexo', await SodexoData.getData('day', 'FI'));
+    createWeeklyMenu('sodexo', 'FI', await SodexoData.getData('weekly', 'FI'));
+
+    fazerDayMenu = createDailyMenu('fazer', await FazerData.getData('day', 'FI'));
+    createWeeklyMenu('fazer', 'FI', await FazerData.getData('weekly', 'FI'));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+/**
+ *  When loading the page, update color-theme, order of the restaurants and the content of the menus
+ */
+updateUI();
+updateOrderOfTheRestaurants();
+initMenus();

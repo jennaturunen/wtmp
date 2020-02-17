@@ -52,6 +52,14 @@
     </section>
 
     <nav>
+      <div class="drop">
+        <button class="sort">Vaihda teemaa</button>
+        <div class="dropdownContent">
+          <a id="darkTheme" class="themeBtn">Tumma</a>
+          <a id="lightTheme" class="themeBtn">Vaalea</a>
+          <a id="blueTheme" class="themeBtn">Sininen</a>
+        </div>
+      </div>
       <button class="language">EN</button>
       <button id="randomBtn">Random</button>
       <div class="drop">
@@ -66,13 +74,17 @@
     <!-- MAIN CONTENT -->
     <main>
       <article class="restaurant">
-        <h3>Metropolia Myyrmäki</h3>
-        <div id="sodexoList" class="menuList"></div>
+        <div id="1" draggable="true" class="draggable">
+          <h3>Metropolia Myyrmäki</h3>
+          <div id="sodexoList" class="menuList"></div>
+        </div>
       </article>
 
       <article class="restaurant">
-        <h3>Metropolia Karaportti</h3>
-        <div id="fazerList" class="menuList"></div>
+        <div id="2" draggable="true" class="draggable">
+          <h3>Metropolia Karaportti</h3>
+          <div id="fazerList" class="menuList"></div>
+        </div>
       </article>
     </main>
 
